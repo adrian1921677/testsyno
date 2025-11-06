@@ -147,7 +147,6 @@ export default function Page() {
     
     const { expr, raw, display, detectedMode } = computed
     const originalInput = input.trim()
-    const t = useTranslation()
     const isEnglish = useSettingsStore.getState().language === "en"
     
     let steps: string[] = []
@@ -311,7 +310,7 @@ export default function Page() {
           <div className="flex items-center">
             <motion.div
               layout
-              className="flex items-center gap-2"
+              className="flex items-center gap-3"
             >
               <motion.img
                 key={`logo-${mode}`}
@@ -322,6 +321,19 @@ export default function Page() {
                 alt="Syno Logo"
                 className="h-32 w-auto"
               />
+              <motion.span
+                key={`beta-${mode}`}
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium uppercase tracking-wider ${
+                  appTheme === "light"
+                    ? "bg-gray-100/80 text-gray-500 ring-1 ring-gray-200"
+                    : "bg-white/10 text-white/60 ring-1 ring-white/20"
+                }`}
+              >
+                Beta
+              </motion.span>
             </motion.div>
           </div>
 
@@ -608,8 +620,8 @@ export default function Page() {
                 ))}
               </div>
 
-              {/* Live result - ausgeblendet: Taschenrechner berechnet im Hintergrund, zeigt aber keine Ergebnisse an */}
-              {/* {computed && (
+              {/* Live result */}
+              {computed && (
                 <motion.div
                   key={`${computed.display}-${mode}`}
                   initial={{ opacity: 0, y: 12 }}
@@ -633,6 +645,33 @@ export default function Page() {
                         : `0 0 30px ${theme.glow}`,
                   }}
                 >
+                  {/* Copy Buttons - nur wenn kein Fehler */}
+                  {computed.display !== "Error" && (
+                    <div className="absolute top-3 right-3 flex gap-2">
+                      <button
+                        onClick={copyResult}
+                        className={`p-2 rounded-md transition ${
+                          appTheme === "light"
+                            ? "hover:bg-gray-200 text-gray-600 hover:text-gray-900"
+                            : "hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200"
+                        }`}
+                        title="Ergebnis kopieren"
+                      >
+                        {copied ? <Check size={18} /> : <Copy size={18} />}
+                      </button>
+                      <button
+                        onClick={copyCalculationSteps}
+                        className={`p-2 rounded-md transition ${
+                          appTheme === "light"
+                            ? "hover:bg-gray-200 text-gray-600 hover:text-gray-900"
+                            : "hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200"
+                        }`}
+                        title="Berechnungsschritte kopieren"
+                      >
+                        {copiedSteps ? <Check size={18} /> : <FileText size={18} />}
+                      </button>
+                    </div>
+                  )}
                   <div className={`text-right ${computed.display !== "Error" ? "pr-24" : ""}`}>
                     <div
                       className="text-4xl font-semibold"
@@ -678,16 +717,16 @@ export default function Page() {
                     )}
                   </div>
                 </motion.div>
-              )} */}
+              )}
 
-              {/* Bestätigungsnachricht - ausgeblendet */}
-              {/* {confirmed && computed && confirmed !== computed.display && (
+              {/* Bestätigungsnachricht */}
+              {confirmed && computed && confirmed !== computed.display && (
                 <div className={`mt-2 text-right text-sm ${
                   appTheme === "light" ? "text-gray-600" : "text-zinc-500"
                 }`}>
                   {t("result.confirmed")} <span className={appTheme === "light" ? "text-gray-800" : "text-zinc-300"}>{confirmed}</span>
                 </div>
-              )} */}
+              )}
             </CardContent>
           </Card>
         </motion.div>
