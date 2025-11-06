@@ -69,7 +69,7 @@ export default function ScreenshotCalculator({ onResult, onClose }: ScreenshotCa
     const worker = await createWorker("eng+deu", 1)
     
     await worker.setParameters({
-      tessedit_pageseg_mode: "8", // Einzelwort
+      tessedit_pageseg_mode: 8, // Einzelwort
       tessedit_char_whitelist: "0123456789+-*/()=.,%sincostanlogsqrtpi^√π×÷: ",
     })
 
