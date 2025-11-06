@@ -660,7 +660,7 @@ export default function CameraCapture({ onTextRecognized, onClose, onReopen }: C
     const worker = await createWorker("eng+deu", 1) // Engine mode 1 (LSTM) beim Erstellen setzen
     
     await worker.setParameters({
-      tessedit_pageseg_mode: 8,
+      tessedit_pageseg_mode: 8 as any,
       tessedit_char_whitelist: "0123456789+-*/()=.,%sincostanlogsqrtpi^√π×÷: ",
     })
 
