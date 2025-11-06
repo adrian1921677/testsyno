@@ -34,7 +34,7 @@ export function normalizeInput(raw: string): string {
   // 0.7) Füllphrasen FRÜH entfernen (VOR "% von" Pattern, damit Pattern matchen können)
   // "wie viel 20% von 70" -> "20% von 70"
   s = s
-    .replace(/\b(wie\s+viel|was\s+ist|wie\s+viel\s+ist|berechne|rechne|ergibt|was|ist)\b/g, " ")
+    .replace(/\b(wie\s+viel|was\s+ist|was\s+sind|wie\s+viel\s+ist|berechne|rechne|ergibt|was|ist|sind)\b/g, " ")
     .replace(/\s+/g, " ")
     .trim()
 
@@ -75,7 +75,7 @@ export function normalizeInput(raw: string): string {
 
   // Füllphrasen entfernen (zweites Mal für Reste nach Operator-Ersetzungen)
   s = s
-    .replace(/\b(wie\s+viel|was\s+ist|wie\s+viel\s+ist|berechne|rechne|ergibt|was|ist)\b/g, " ")
+    .replace(/\b(wie\s+viel|was\s+ist|was\s+sind|wie\s+viel\s+ist|berechne|rechne|ergibt|was|ist|sind)\b/g, " ")
     .replace(/\s+/g, " ")
     .trim()
 

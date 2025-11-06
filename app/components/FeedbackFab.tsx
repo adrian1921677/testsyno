@@ -6,10 +6,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Star } from "lucide-react"
 import { useModeStore, THEMES } from "../lib/mode"
+import { useTranslation } from "../lib/i18n"
+import { useSettingsStore } from "../lib/settings"
 
 export default function FeedbackFab() {
   const { mode } = useModeStore()
   const theme = THEMES[mode]
+  const t = useTranslation()
+  const appTheme = useSettingsStore((state) => state.theme)
   const [open, setOpen] = useState(false)
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState<number | null>(null)
@@ -54,16 +58,24 @@ export default function FeedbackFab() {
         <DialogTrigger asChild>
           <button
             aria-label="Feedback"
-            className="grid h-12 w-12 place-items-center rounded-full border border-zinc-800 bg-zinc-900/80 backdrop-blur-md transition"
+            className={`grid h-12 w-12 place-items-center rounded-full border backdrop-blur-md transition ${
+              appTheme === "light"
+                ? "border-gray-300 bg-white/90"
+                : "border-zinc-800 bg-zinc-900/80"
+            }`}
             style={{ boxShadow: `0 0 18px ${theme.glow}`, color: theme.accent }}
-            title="Feedback geben"
+            title={t("feedback.title")}
           >
             <Star size={18} />
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[460px] bg-[#0f0f10]/90 border-zinc-800 text-white">
+        <DialogContent className={`sm:max-w-[460px] backdrop-blur-xl ${
+          appTheme === "light"
+            ? "bg-white/95 border-gray-200 text-gray-900"
+            : "bg-[#0f0f10]/90 border-zinc-800 text-white"
+        }`}>
           <DialogHeader>
-            <DialogTitle>Feedback</DialogTitle>
+            <DialogTitle>{t("feedback.title")}</DialogTitle>
           </DialogHeader>
 
           {/* Stars */}
@@ -82,53 +94,82 @@ export default function FeedbackFab() {
                 >
                   <Star
                     size={22}
-                    style={{ color: active ? theme.accent : "#525252" }}
+                    style={{ color: active ? theme.accent : appTheme === "light" ? "#9ca3af" : "#525252" }}
                     fill={active ? theme.accent : "none"}
                   />
                 </button>
               )
             })}
-            <span className="ml-2 text-sm text-zinc-400">{rating}/5</span>
+            <span className={`ml-2 text-sm ${
+              appTheme === "light" ? "text-gray-500" : "text-zinc-400"
+            }`}>{rating}/5</span>
           </div>
 
           {/* Message */}
           <div className="mt-3 space-y-1">
-            <Label htmlFor="msg">Dein Feedback (optional)</Label>
+            <Label htmlFor="msg">{t("feedback.message")}</Label>
             <Textarea
               id="msg"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Was ist gut? Was fehlt? Bugs?"
-              className="min-h-[100px] bg-zinc-900/70 border-zinc-800"
+              placeholder={t("feedback.messagePlaceholder")}
+              className={`min-h-[100px] ${
+                appTheme === "light"
+                  ? "bg-gray-50 border-gray-300"
+                  : "bg-zinc-900/70 border-zinc-800"
+              }`}
               maxLength={1000}
             />
           </div>
 
           {/* Email optional */}
           <div className="mt-3 space-y-1">
-            <Label htmlFor="email">E-Mail (optional, für Rückfragen)</Label>
-            <Input id="email" ref={emailRef} className="bg-zinc-900/70 border-zinc-800" type="email" />
+            <Label htmlFor="email">{t("feedback.email")}</Label>
+            <Input 
+              id="email" 
+              ref={emailRef} 
+              className={appTheme === "light" ? "bg-gray-50 border-gray-300" : "bg-zinc-900/70 border-zinc-800"} 
+              type="email"
+              placeholder={t("feedback.emailPlaceholder")}
+            />
           </div>
 
           <div className="mt-4 flex items-center justify-between">
-            <span className="text-xs text-zinc-500">Mode: {mode}</span>
+            <span className={`text-xs ${
+              appTheme === "light" ? "text-gray-500" : "text-zinc-500"
+            }`}>Mode: {mode}</span>
             <button
               onClick={submit}
               disabled={sending || rating === 0}
-              className="rounded-md px-4 py-2 text-sm font-medium transition border"
+              className={`rounded-md px-4 py-2 text-sm font-medium transition border ${
+                appTheme === "light"
+                  ? "border-gray-300"
+                  : "border-gray-800"
+              }`}
               style={{
-                color: sending ? "#999" : "#0b0b0b",
-                background: sending ? "#2a2a2a" : theme.accent,
-                borderColor: "#222",
+                color: sending 
+                  ? appTheme === "light" ? "#6b7280" : "#999"
+                  : appTheme === "light" ? "#111" : "#0b0b0b",
+                background: sending 
+                  ? appTheme === "light" ? "#e5e7eb" : "#2a2a2a"
+                  : theme.accent,
                 opacity: sending ? 0.7 : 1,
               }}
             >
-              {sending ? "Senden..." : "Absenden"}
+              {sending ? t("feedback.sending") : t("feedback.submit")}
             </button>
           </div>
 
-          {done === "ok" && <div className="text-lime-400 text-sm mt-2">Danke! Feedback gesendet.</div>}
-          {done === "err" && <div className="text-red-400 text-sm mt-2">Senden fehlgeschlagen.</div>}
+          {done === "ok" && (
+            <div className={`text-sm mt-2 ${
+              appTheme === "light" ? "text-green-600" : "text-lime-400"
+            }`}>{t("feedback.success")}</div>
+          )}
+          {done === "err" && (
+            <div className={`text-sm mt-2 ${
+              appTheme === "light" ? "text-red-600" : "text-red-400"
+            }`}>{t("feedback.error")}</div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

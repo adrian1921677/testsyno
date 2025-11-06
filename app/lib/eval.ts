@@ -15,6 +15,28 @@ const scopeFinance = {
     (pv * rate) / (1 - Math.pow(1 + rate, -n)),
 }
 
+// Basic: Trigonometrische Funktionen mit Grad statt Radiant, log() als dekadischer Logarithmus
+const scopeBasic = {
+  // sin, cos, tan: Grad zu Radiant umwandeln (Grad * π/180)
+  sin: (x: number) => Math.sin((x * Math.PI) / 180),
+  cos: (x: number) => Math.cos((x * Math.PI) / 180),
+  tan: (x: number) => Math.tan((x * Math.PI) / 180),
+  // log() als dekadischer Logarithmus (log10)
+  log: (x: number) => Math.log10(x),
+}
+
+// Advanced: Trigonometrische Funktionen mit Grad (wenn kein explizites "rad" vorhanden)
+// MathJS unterstützt "deg" Units, aber wir überschreiben für Konsistenz
+const scopeAdvanced = {
+  // sin, cos, tan: Grad zu Radiant umwandeln (Grad * π/180)
+  // Wenn der Ausdruck "rad" enthält, wird MathJS die Standard-Funktionen verwenden
+  sin: (x: number) => Math.sin((x * Math.PI) / 180),
+  cos: (x: number) => Math.cos((x * Math.PI) / 180),
+  tan: (x: number) => Math.tan((x * Math.PI) / 180),
+  // log() als dekadischer Logarithmus (log10)
+  log: (x: number) => Math.log10(x),
+}
+
 function fmtFinance(x: any) {
   if (!isNum(x)) return String(x)
   const v = Math.round(x * 100) / 100
@@ -64,10 +86,24 @@ export function evalByMode(input: string, currentMode: Mode, autoDetect: boolean
   }
   
   try {
-    // MathJS evaluate: Wenn kein Scope benötigt wird, nur expr übergeben
-    const raw = effectiveMode === "finance" 
-      ? evaluate(expr, scopeFinance as any)
-      : evaluate(expr)
+    // MathJS evaluate: Scope für finance, basic und advanced Modus
+    let raw: any
+    if (effectiveMode === "finance") {
+      raw = evaluate(expr, scopeFinance as any)
+    } else if (effectiveMode === "basic") {
+      raw = evaluate(expr, scopeBasic as any)
+    } else if (effectiveMode === "advanced") {
+      // Wenn "deg" vorhanden ist, verwendet MathJS bereits Grad-Units korrekt
+      // Wenn "rad" vorhanden ist, verwende Standard MathJS (Radiant)
+      // Sonst verwende unseren Scope (Grad)
+      if (/\bdeg\b/i.test(expr) || /\brad\b/i.test(expr)) {
+        raw = evaluate(expr)
+      } else {
+        raw = evaluate(expr, scopeAdvanced as any)
+      }
+    } else {
+      raw = evaluate(expr)
+    }
 
     let display: string
     switch (effectiveMode) {
