@@ -97,8 +97,6 @@ export default function SettingsDialog({ open, onOpenChange }: { open: boolean; 
                 className="relative w-14 h-8 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
                 style={{
                   backgroundColor: theme === "dark" ? themeColors.accent : "#6b7280",
-                  focusRingColor: themeColors.accent,
-                  focusRingOffsetColor: appTheme === "light" ? "#fff" : "#18181b",
                 }}
                 aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
               >
