@@ -603,7 +603,7 @@ export default function CameraCapture({ onTextRecognized, onClose, onReopen }: C
       formData.append("image", blob, "math-image.jpg")
 
       // API aufrufen
-      const response = await fetch("/api/syno/google-vision", {
+      const response = await fetch("/api/google-vision", {
         method: "POST",
         body: formData,
       })
@@ -637,7 +637,7 @@ export default function CameraCapture({ onTextRecognized, onClose, onReopen }: C
       formData.append("image", blob, "math-image.jpg")
 
       // API aufrufen
-      const response = await fetch("/api/syno/mathpix", {
+      const response = await fetch("/api/mathpix", {
         method: "POST",
         body: formData,
       })

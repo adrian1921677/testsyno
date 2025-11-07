@@ -26,7 +26,7 @@ export default function FeedbackFab() {
     setSending(true)
     setDone(null)
     try {
-      const res = await fetch("/api/syno/feedback", {
+      const res = await fetch("/api/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

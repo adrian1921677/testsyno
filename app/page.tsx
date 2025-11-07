@@ -745,13 +745,13 @@ export default function Page() {
         {/* Signatur unten rechts */}
         <div className="absolute bottom-5 right-5 z-20">
           <a
-            href="https://abdullahu-adrian.de"
+            href="https://www.abdullahu-adrian.de/"
             target="_blank"
             rel="noopener noreferrer"
             className="block transition-all duration-300 hover:scale-110 hover:brightness-110"
             onClick={(e) => {
               e.preventDefault()
-              window.open("https://abdullahu-adrian.de", "_blank", "noopener,noreferrer")
+              window.open("https://www.abdullahu-adrian.de/", "_blank", "noopener,noreferrer")
             }}
           >
             <img 
