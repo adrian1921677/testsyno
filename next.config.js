@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/SYNO',
-  // Optional: Wenn du auch eine assetPrefix brauchst (z.B. für CDN)
-  // assetPrefix: '/SYNO',
+  // Base Path entfernt für Subdomain syno.abdullahu-adrian.de
+  // Wenn du stattdessen abdullahu-adrian.de/SYNO verwenden willst, setze basePath: '/SYNO'
 }
 
 module.exports = nextConfig
