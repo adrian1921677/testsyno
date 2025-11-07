@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     `
 
     await resend.emails.send({
-      from: "Syno Feedback <feedback@your-domain.com>",
+      from: "Syno Feedback <feedback@abdullahu-adrian.de>",
       to: FEEDBACK_TO,
       subject,
       html,
